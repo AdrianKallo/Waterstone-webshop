@@ -15,7 +15,7 @@ describe('Add products to shopping cart', () => {
         driver.manage().setTimeouts({implicit: TIMEOUT, pageLoad: TIMEOUT, script: TIMEOUT});
 
         await driver.get("https://www.waterstones.com/");
-        driver.sleep(1000);
+        driver.sleep(15000);
         let cookieButton = await driver.findElement(By.css("#onetrust-button-group > #onetrust-accept-btn-handler")); 
         cookieButton.click();
     });
