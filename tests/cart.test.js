@@ -82,34 +82,35 @@ describe('Add products to shopping cart', () => {
 
     test('Test shopping cart has two correct items', async () => {
         await driver.findElement(By.css("a.basket > strong")).click();
-        //Verify that cart sum is correct.
-        let itemPrices = await driver.findElements(By.className("lblTotalItem lblTotalItemCost"));
+        // Verify that cart sum is correct.
+        let itemPrices = await driver.wait(until.elementsLocated(By.className("lblTotalItem lblTotalItemCost")), TIMEOUT);
         let firstPrice = parseFloat((await itemPrices[0].getText()).replace(/£/g, ""));
         let secondPrice = parseFloat((await itemPrices[1].getText()).replace(/£/g, ""));
-        
-        let basketSum = await driver.findElement(By.css("body > div.row.chk-surround.large-min-height > div.large-6.chk-right.columns.show-for-large > div > div > div.float-left.position-relative.full-width.large-margin-top-24 > div > div.row.panel-total-to-pay > div.large-11.columns.large-padding-top-8.large-border-dotted-top.large-padding-left-0 > div > p > span")).getText();
-        const basketSumNum = parseFloat(basketSum.replace(/£/g,""))
-
+    
+        let basketSum = await driver.wait(until.elementLocated(By.css("body > div.row.chk-surround.large-min-height > div.large-6.chk-right.columns.show-for-large > div > div > div.float-left.position-relative.full-width.large-margin-top-24 > div > div.row.panel-total-to-pay > div.large-11.columns.large-padding-top-8.large-border-dotted-top.large-padding-left-0 > div > p > span")), TIMEOUT).getText();
+        const basketSumNum = parseFloat(basketSum.replace(/£/g, ""));
+    
         expect(basketSumNum).toBe(firstPrice + secondPrice);
-
-        //Verify that cart has correct items added.
-    })
-
+    
+        // Verify that cart has correct items added.
+    });
+    
     test('Test remove first product from the cart', async () => {
-        //Remove first product from the cart
+        // Remove first product from the cart
         await driver.findElement(By.css("body > div.row.chk-surround.large-min-height > div.small-24.chk-left.medium-24.large-18.columns.main-container > div.panel-basket.panel-content-basket > div > ul > li:nth-child(1) > div > div.panel-basket-item > div.small-19.medium-12.columns.medium-margin-left-4.small-padding-left-0.small-padding-right-0 > ul > li:nth-child(2) > a")).click();
-
-        //Verify that cart has 1 item.
-        let getBasketCount = await driver.findElement(By.css("body > div.row.chk-surround.large-min-height > div.large-6.chk-right.columns.show-for-large > div > div > div.float-left.position-relative.full-width.large-margin-top-24 > div > div:nth-child(2) > div > p > a > span.lblBasketQuantity"));
-        driver.wait(until.elementTextIs(getBasketCount, "1"), 5000);
-
-        //Verify that cart sum is correct.
-        let itemPrices = await driver.findElements(By.className("lblTotalItem lblTotalItemCost"));
-        let firstPrice = (await itemPrices[0].getText()).replace(/£/g, "");
-        
-        let basketSum = await driver.findElement(By.css("body > div.row.chk-surround.large-min-height > div.large-6.chk-right.columns.show-for-large > div > div > div.float-left.position-relative.full-width.large-margin-top-24 > div > div.row.panel-total-to-pay > div.large-11.columns.large-padding-top-8.large-border-dotted-top.large-padding-left-0 > div > p > span"));
-        driver.wait(until.elementTextIs(basketSum, firstPrice), 5000);
-
-        //Verify that cart has correct items added.
-    })
+    
+        // Verify that cart has 1 item.
+        let getBasketCount = await driver.wait(until.elementLocated(By.css("body > div.row.chk-surround.large-min-height > div.large-6.chk-right.columns.show-for-large > div > div > div.float-left.position-relative.full-width.large-margin-top-24 > div > div:nth-child(2) > div > p > a > span.lblBasketQuantity")), TIMEOUT);
+        await driver.wait(until.elementTextIs(getBasketCount, "1"), TIMEOUT);
+    
+        // Verify that cart sum is correct.
+        let itemPrices = await driver.wait(until.elementsLocated(By.className("lblTotalItem lblTotalItemCost")), TIMEOUT);
+        let firstPrice = parseFloat((await itemPrices[0].getText()).replace(/£/g, ""));
+    
+        let basketSum = await driver.wait(until.elementLocated(By.css("body > div.row.chk-surround.large-min-height > div.large-6.chk-right.columns.show-for-large > div > div > div.float-left.position-relative.full-width.large-margin-top-24 > div > div.row.panel-total-to-pay > div.large-11.columns.large-padding-top-8.large-border-dotted-top.large-padding-left-0 > div > p > span")), TIMEOUT);
+        await driver.wait(until.elementTextIs(basketSum, firstPrice), TIMEOUT);
+    
+        // Verify that cart has correct items added.
+    });
+    
 })
